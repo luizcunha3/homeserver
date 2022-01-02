@@ -25,9 +25,9 @@ services:
     volumes:
       - /apps/sonarr/configuration:/config
       - /apps/qbittorrent/downloads:/downloads
-      - /media/tv:/tv
+      - /media/tv:/tv #remember to chmod -R -v 777 /tv
     ports:
-      - 8989:8989
+      - 8989:8989       #webUI
 
   radarr:
     image: lscr.io/linuxserver/radarr
@@ -35,6 +35,23 @@ services:
     volumes:
       - /apps/radarr/configuration:/config
       - /apps/qbittorrent/downloads:/downloads
-      - /media/movies:/movies
+      - /media/movies:/movies #remember to chmod -R -v 777 /movies
     ports:
-      - 7878:7878
+      - 7878:7878       #webUI
+
+  plex:
+    image: lscr.io/linuxserver/plex
+    container_name: plex
+    volumes: 
+      - /apps/plex/configuration:/config
+      - /media/movies:/movies
+      - /media/tvseries:/tv
+
+  heimdall:
+    image: lscr.io/linuxserver/heimdall
+    container_name: heimdall
+    volumes:
+      - /apps/heimdal/configuration:/config
+    ports:
+      - 80:80
+      - 443:433
