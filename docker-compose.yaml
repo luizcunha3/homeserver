@@ -1,10 +1,10 @@
-version: "2.1"
+version: "2"
 services:
   qbittorrent:
     image: lscr.io/linuxserver/qbittorrent
     container_name: qbittorrent
     volumes:
-      - /apps/qbittorrent/downloads:/downloads # pathOnMySystem : pathOnDockerContainer
+      - /disk1/apps/qbittorrent/downloads:/downloads # pathOnMySystem : pathOnDockerContainer
       - /apps/qbittorrent/configuration:/config
     ports:
       - 6881:6881       #tcp connection 
@@ -15,37 +15,39 @@ services:
     container_name: jackett
     volumes:
       - /apps/jackett/configuration:/config
-      - /apps/qbittorrent/downloads:/downloads
+      - /disk1/apps/qbittorrent/downloads:/downloads
     ports:
       - 9117:9117       #webUI
-  
   sonarr:
     image: lscr.io/linuxserver/sonarr
     container_name: sonarr
     volumes:
       - /apps/sonarr/configuration:/config
-      - /apps/qbittorrent/downloads:/downloads
-      - /media/tv:/tv #remember to chmod -R -v 777 /tv
+      - /disk1/apps/qbittorrent/downloads:/downloads
+      - /disk1/media/tv:/tv #remember to chmod -R -v 777 /tv
     ports:
       - 8989:8989       #webUI
-
   radarr:
     image: lscr.io/linuxserver/radarr
     container_name: radarr
     volumes:
       - /apps/radarr/configuration:/config
-      - /apps/qbittorrent/downloads:/downloads
-      - /media/movies:/movies #remember to chmod -R -v 777 /movies
+      - /disk1/apps/qbittorrent/downloads:/downloads
+      - /disk1/media/movies:/movies #remember to chmod -R -v 777 /movies
     ports:
       - 7878:7878       #webUI
-
   plex:
     image: lscr.io/linuxserver/plex
     container_name: plex
+    network_mode: host
+    environment:
+     - PLEX_CLAIM=claim-fcUqmxE32r9eiwk74QeM
     volumes: 
       - /apps/plex/configuration:/config
-      - /media/movies:/movies
-      - /media/tvseries:/tv
+      - /disk1/media/movies:/movies
+      - /disk1/media/tvseries:/tv
+    ports:
+      - 32400:32400
 
   heimdall:
     image: lscr.io/linuxserver/heimdall
