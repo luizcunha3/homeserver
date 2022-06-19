@@ -1,11 +1,25 @@
+#must add ${DISK} variable in portainer environment
 version: "2"
 services:
+  gitlab:
+    image: gitlab/gitlab-ee:latest
+    container_name: gitlab
+    volumes:
+     - '${DISK}/apps/gitlab/config:/etc/gitlab'
+     - '${DISK}/apps/gitlab/logs:/var/log/gitlab'
+     - '${DISK}/apps/gitlab/data:/var/opt/gitlab'
+    ports:
+      - '9090:80'
+      - '9091:443'
+      - '9092:22'
+    shm_size: '256m'
+    
   qbittorrent:
     image: lscr.io/linuxserver/qbittorrent
     container_name: qbittorrent
     volumes:
-      - /disk1/apps/qbittorrent/downloads:/downloads # pathOnMySystem : pathOnDockerContainer
-      - /apps/qbittorrent/configuration:/config
+      - ${DISK}/apps/qbittorrent/downloads:/downloads # pathOnMySystem : pathOnDockerContainer
+      - ${DISK}/apps/qbittorrent/configuration:/config
     ports:
       - 6881:6881       #tcp connection 
       - 6881:6881/udp   #udp connection
@@ -14,26 +28,26 @@ services:
     image: lscr.io/linuxserver/jackett
     container_name: jackett
     volumes:
-      - /apps/jackett/configuration:/config
-      - /disk1/apps/qbittorrent/downloads:/downloads
+      - ${DISK}/apps/jackett/configuration:/config
+      - ${DISK}/apps/qbittorrent/downloads:/downloads
     ports:
       - 9117:9117       #webUI
   sonarr:
     image: lscr.io/linuxserver/sonarr
     container_name: sonarr
     volumes:
-      - /apps/sonarr/configuration:/config
-      - /disk1/apps/qbittorrent/downloads:/downloads
-      - /disk1/media/tv:/tv #remember to chmod -R -v 777 /tv
+      - ${DISK}/apps/sonarr/configuration:/config
+      - ${DISK}/apps/qbittorrent/downloads:/downloads
+      - ${DISK}/media/tv:/tv #remember to chmod -R -v 777 /tv
     ports:
       - 8989:8989       #webUI
   radarr:
     image: lscr.io/linuxserver/radarr
     container_name: radarr
     volumes:
-      - /apps/radarr/configuration:/config
-      - /disk1/apps/qbittorrent/downloads:/downloads
-      - /disk1/media/movies:/movies #remember to chmod -R -v 777 /movies
+      - ${DISK}/apps/radarr/configuration:/config
+      - ${DISK}/apps/qbittorrent/downloads:/downloads
+      - ${DISK}/media/movies:/movies #remember to chmod -R -v 777 /movies
     ports:
       - 7878:7878       #webUI
   plex:
@@ -43,9 +57,9 @@ services:
     environment:
      - PLEX_CLAIM=claim-fcUqmxE32r9eiwk74QeM
     volumes: 
-      - /apps/plex/configuration:/config
-      - /disk1/media/movies:/movies
-      - /disk1/media/tvseries:/tv
+      - ${DISK}/apps/plex/configuration:/config
+      - ${DISK}/media/movies:/movies
+      - ${DISK}/media/tvseries:/tv
     ports:
       - 32400:32400
 
@@ -53,7 +67,7 @@ services:
     image: lscr.io/linuxserver/heimdall
     container_name: heimdall
     volumes:
-      - /apps/heimdal/configuration:/config
+      - ${DISK}/apps/heimdal/configuration:/config
     ports:
       - 80:80
       - 443:433
