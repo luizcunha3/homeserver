@@ -55,5 +55,5 @@ services:
     volumes:
       - ${DISK}/apps/heimdal/configuration:/config
     ports:
-      - 80:80
-      - 443:433
+      - 8050:80
+      - 8051:433
