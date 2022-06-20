@@ -1,19 +1,6 @@
 #must add ${DISK} variable in portainer environment
 version: "2"
 services:
-  gitlab:
-    image: gitlab/gitlab-ee:latest
-    container_name: gitlab
-    volumes:
-     - '${DISK}/apps/gitlab/config:/etc/gitlab'
-     - '${DISK}/apps/gitlab/logs:/var/log/gitlab'
-     - '${DISK}/apps/gitlab/data:/var/opt/gitlab'
-    ports:
-      - '9090:80'
-      - '9091:443'
-      - '9092:22'
-    shm_size: '256m'
-    
   qbittorrent:
     image: lscr.io/linuxserver/qbittorrent
     container_name: qbittorrent
@@ -62,7 +49,6 @@ services:
       - ${DISK}/media/tvseries:/tv
     ports:
       - 32400:32400
-
   heimdall:
     image: lscr.io/linuxserver/heimdall
     container_name: heimdall
