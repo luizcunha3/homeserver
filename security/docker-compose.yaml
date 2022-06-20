@@ -7,4 +7,4 @@ services:
     volumes:
       - ${DISK}/apps/vaultwarden/data:/data/
     ports:
-      - 8181:80
+      - 8181:8
