@@ -57,3 +57,15 @@ services:
     ports:
       - 8050:80
       - 8051:433
+  jellyfin:
+    image: lscr.io/linuxserver/jellyfin:latest
+    container_name: jellyfin
+    volumes:
+      - ${DISK}/apps/jellyfin/config:/config
+      - ${DISK}/media/tvseries:/data/tvshows
+      - ${DISK}/media/movies:/data/movies
+    ports:
+      - 7777:8096
+      - 7778:8920 #optional
+      - 7779:7359/udp #optional
+      - 7780:1900/udp #optional
