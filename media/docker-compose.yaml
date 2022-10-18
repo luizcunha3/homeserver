@@ -3,26 +3,7 @@ version: "3.8"
 networks:
   homeserver:
     driver: bridge
-
 services:
-  swag:
-    image: lscr.io/linuxserver/swag:latest
-    container_name: swag
-    restart: unless-stopped
-    environment:
-      - PUID=1000
-      - PGID=1000
-      - TZ=Europe/London
-      - URL=yourdomain.url
-      - VALIDATION=http
-    volumes:
-      - $DISK/apps/swag:/config
-    ports:
-      - 443:443
-      - 80:80 #optional
-    networks: 
-      - homeserver
-    restart: unless-stopped
   qbittorrent:
     image: lscr.io/linuxserver/qbittorrent
     container_name: qbittorrent
