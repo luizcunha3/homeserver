@@ -13,7 +13,7 @@ services:
     ports:
       - 6881:6881       #tcp connection 
       - 6881:6881/udp   #udp connection
-      - 8080:8080       #webUI
+      - $QBITTORRENT_PORT:8080       #webUI
     networks:
       - homeserver
     restart: unless-stopped
@@ -24,7 +24,7 @@ services:
       - $DISK/apps/jackett/configuration:/config
       - $DISK/apps/qbittorrent/downloads:/downloads
     ports:
-      - 9117:9117       #webUI
+      - $JACKETT_PORT:9117       #webUI
     networks:
       - homeserver
     restart: unless-stopped
@@ -36,7 +36,7 @@ services:
       - $DISK/apps/qbittorrent/downloads:/downloads
       - $DISK/media/tv:/tv #remember to chmod -R -v 777 /tv
     ports:
-      - 8989:8989       #webUI
+      - $SONARR_PORT:8989       #webUI
     networks:
       - homeserver
     restart: unless-stopped
@@ -48,7 +48,7 @@ services:
       - $DISK/apps/qbittorrent/downloads:/downloads
       - $DISK/media/movies:/movies #remember to chmod -R -v 777 /movies
     ports:
-      - 7878:7878       #webUI
+      - $RADARR_PORT:7878       #webUI
     networks:
       - homeserver
     restart: unless-stopped
@@ -62,7 +62,7 @@ services:
       - $DISK/media/movies:/movies
       - $DISK/media/tvseries:/tv
     ports:
-      - 32400:32400
+      - $PLEX_PORT:32400
     networks:
       - homeserver
     restart: unless-stopped
@@ -72,8 +72,8 @@ services:
     volumes:
       - $DISK/apps/heimdal/configuration:/config
     ports:
-      - 8050:80
-      - 8051:433
+      - $HEIMDALL_PORT:80
+      - $HEIMDALL_PORT_SSL:433
     networks:
       - homeserver
     restart: unless-stopped
