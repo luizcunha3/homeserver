@@ -1,6 +1,2 @@
-apps/jackett
-apps/plex
-apps/qbittorrent
-apps/radarr
-apps/sonarr
+apps/*
 media/*
