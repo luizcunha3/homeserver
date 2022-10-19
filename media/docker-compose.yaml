@@ -60,7 +60,7 @@ services:
     volumes: 
       - $DISK/apps/plex/configuration:/config
       - $DISK/media/movies:/movies
-      - $DISK/media/tvseries:/tv
+      - $DISK/media/tv:/tv
     ports:
       - $PLEX_PORT:32400
     networks:
