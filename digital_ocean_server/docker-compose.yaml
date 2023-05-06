@@ -19,7 +19,7 @@ services:
     volumes:
       - $HOME_BOX/data:/data
     ports:
-      - $HOMEBOX_PORT:7745
+      - $HOME_BOX_PORT:7745
     
   little_links:
     network_mode: bridge
