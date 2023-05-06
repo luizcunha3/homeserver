@@ -1,0 +1,40 @@
+version: "3.8"
+services:
+  nginx_proxy_manager:
+    network_mode: bridge
+    image: jc21/nginx-proxy-manager:latest
+    container_name: nginx_proxy_manager
+    volumes:
+      - $NGINX_PROXY_MANAGER/config:/data
+      - $NGINX_PROXY_MANAGER/letsencrypt:/etc/letsencrypt
+    ports:
+      - 80:80
+      - 81:81
+      - 443:443
+    restart: unless-stopped
+  little_links:
+    network_mode: bridge
+    image: ghcr.io/techno-tim/littlelink-server:latest
+    container_name: little_links
+    ports:
+      - $LL_PORT:3000
+    restart: unless-stopped
+    environment:
+      - META_TITLE=$LL_META_TITLE
+      - META_DESCRIPTION=$LL_META_DESCRIPTION
+      - META_AUTHOR=$LL_META_AUTHOR
+      - META_KEYWORDS=$LL_META_KEYWORDS
+      - LANG=$LL_LANG
+      - THEME=$LL_THEME
+      - FAVICON_URL=$LL_FAVICON_URL
+      - AVATAR_URL=$LL_AVATAR_URL
+      - AVATAR_2X_URL=$LL_AVATAR_2X_URL
+      - AVATAR_ALT=$LL_AVATAR_ALT
+      - NAME=$LL_NAME
+      - BIO=$LL_BIO
+      - BUTTON_ORDER=$LL_BUTTON_ORDER
+      - GITHUB=$LL_GITHUB
+      - TWITTER=$LL_TWITTER
+      - INSTAGRAM=$LL_INSTAGRAM
+      - LINKED_IN=$LL_LINKED_IN
+      - FOOTER=$LL_FOOTER
