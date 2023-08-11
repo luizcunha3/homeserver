@@ -1,79 +1,22 @@
-#must add $DISK variable in portainer environment
 version: "3.8"
-networks:
-  homeserver:
-    driver: bridge
 services:
   qbittorrent:
     image: lscr.io/linuxserver/qbittorrent
-    container_name: qbittorrent
+    container_name: qBittorrent
     volumes:
-      - $DISK/apps/qbittorrent/downloads:/downloads # pathOnMySystem : pathOnDockerContainer
-      - $DISK/apps/qbittorrent/configuration:/config
+      - $DISK/.apps/qbittorrent:/config
+      - $DISK/downloads:/downloads
     ports:
-      - 6881:6881       #tcp connection 
-      - 6881:6881/udp   #udp connection
-      - $QBITTORRENT_PORT:8080       #webUI
-    networks:
-      - homeserver
+      - 8080:8080
+      - 6881:6811
+      - 6881:6811/udp
     restart: unless-stopped
   jackett:
     image: lscr.io/linuxserver/jackett
     container_name: jackett
     volumes:
-      - $DISK/apps/jackett/configuration:/config
-      - $DISK/apps/qbittorrent/downloads:/downloads
+      - $DISK/.apps/jackett/configuration:/config
+      - $DISK/downloads:/downloads
     ports:
-      - $JACKETT_PORT:9117       #webUI
-    networks:
-      - homeserver
-    restart: unless-stopped
-  sonarr:
-    image: lscr.io/linuxserver/sonarr
-    container_name: sonarr
-    volumes:
-      - $DISK/apps/sonarr/configuration:/config
-      - $DISK/apps/qbittorrent/downloads:/downloads
-      - $DISK/media/tv:/tv #remember to chmod -R -v 777 /tv
-    ports:
-      - $SONARR_PORT:8989       #webUI
-    networks:
-      - homeserver
-    restart: unless-stopped
-  radarr:
-    image: lscr.io/linuxserver/radarr
-    container_name: radarr
-    volumes:
-      - $DISK/apps/radarr/configuration:/config
-      - $DISK/apps/qbittorrent/downloads:/downloads
-      - $DISK/media/movies:/movies #remember to chmod -R -v 777 /movies
-    ports:
-      - $RADARR_PORT:7878       #webUI
-    networks:
-      - homeserver
-    restart: unless-stopped
-  plex:
-    image: lscr.io/linuxserver/plex
-    container_name: plex
-    environment:
-     - PLEX_CLAIM=claim-fcUqmxE32r9eiwk74QeM
-    volumes: 
-      - $DISK/apps/plex/configuration:/config
-      - $DISK/media/movies:/movies
-      - $DISK/media/tv:/tv
-    ports:
-      - $PLEX_PORT:32400
-    networks:
-      - homeserver
-    restart: unless-stopped
-  heimdall:
-    image: lscr.io/linuxserver/heimdall
-    container_name: heimdall
-    volumes:
-      - $DISK/apps/heimdal/configuration:/config
-    ports:
-      - $HEIMDALL_PORT:80
-      - $HEIMDALL_PORT_SSL:433
-    networks:
-      - homeserver
+      - 9117:9117
     restart: unless-stopped
