@@ -1,5 +1,16 @@
 version: "3.8"
+networks:
+  homeserver:
+    driver: bridge
 services:
+  homarr:
+    container_name: homarr
+    image: ghcr.io/ajnart/homarr:latest
+    restart: unless-stopped
+    volumes:
+      - $LOCAL/.apps/homarr:/app/data/configs
+    ports:
+      - '80:7575'
   qbittorrent:
     image: lscr.io/linuxserver/qbittorrent
     container_name: qBittorrent
@@ -10,6 +21,8 @@ services:
       - 8080:8080
       - 6881:6811
       - 6881:6811/udp
+    networks:
+      - homeserver
     restart: unless-stopped
   jackett:
     image: lscr.io/linuxserver/jackett
@@ -17,6 +30,53 @@ services:
     volumes:
       - $DISK/.apps/jackett/configuration:/config
       - $DISK/downloads:/downloads
+    networks:
+      - homeserver
     ports:
       - 9117:9117
+    restart: unless-stopped
+  plex:
+    image: lscr.io/linuxserver/plex:latest
+    container_name: plex
+    network_mode: host
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=America/Sao_Paulo
+      - VERSION=docker
+    volumes:
+      - $LOCAL/.apps/plex:/config
+      - $DISK/media/movies:/movies
+      - $DISK/media/tv:/tv 
+  sonarr:
+    image: lscr.io/linuxserver/sonarr
+    container_name: sonarr
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=America/Sao_Paulo
+    volumes:
+      - $LOCAL/sonarr:/config
+      - $DISK/downloads:/downloads
+      - $DISK/media/tv:/tv 
+    ports:
+      - 8989:8989
+    networks:
+      - homeserver
+    restart: unless-stopped
+  radarr:
+    image: lscr.io/linuxserver/radarr
+    container_name: radarr
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=America/Sao_Paulo
+    volumes:
+      - $LOCAL/radarr:/config
+      - $DISK/downloads:/downloads
+      - $DISK/media/movies:/movies #remember to chmod -R -v 777 /movies
+    ports:
+      - 7878:7878
+    networks:
+      - homeserver
     restart: unless-stopped
