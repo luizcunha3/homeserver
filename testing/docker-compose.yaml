@@ -1,0 +1,106 @@
+version: "3.8"
+networks:
+  homeserver:
+    driver: bridge
+services:
+  homarr:
+    container_name: homarr
+    image: ghcr.io/ajnart/homarr:latest
+    restart: unless-stopped
+    volumes:
+      - $LOCAL/.apps/homarr:/app/data/configs
+    ports:
+      - '80:7575'
+  qbittorrent:
+    image: lscr.io/linuxserver/qbittorrent
+    container_name: qBittorrent
+    volumes:
+      - $CONFIG/qbittorrent:/config
+      - $DISK/downloads:/downloads
+    ports:
+      - 8080:8080
+      - 6881:6811
+      - 6881:6811/udp
+    networks:
+      - homeserver
+    restart: unless-stopped
+  prowlarr:
+    image: lscr.io/linuxserver/prowlarr:latest
+    container_name: prowlarr
+    volumes:
+      - /path/to/data:/config
+    ports:
+      - 9696:9696
+    restart: unless-stopped
+  plex:
+    restart: unless-stopped
+    image: lscr.io/linuxserver/plex:latest
+    container_name: plex
+    network_mode: host
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=America/Sao_Paulo
+      - VERSION=docker
+    volumes:
+      - $CONFIG/plex:/config
+      - $DISK/media/movies:/movies
+      - $DISK/media/tv:/tv 
+  sonarr:
+    image: lscr.io/linuxserver/sonarr
+    container_name: sonarr
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=America/Sao_Paulo
+    volumes:
+      - $CONFIG/sonarr:/config
+      - $DISK/downloads:/downloads
+      - $DISK/media/tv:/tv 
+    ports:
+      - 8989:8989
+    networks:
+      - homeserver
+    restart: unless-stopped
+  radarr:
+    image: lscr.io/linuxserver/radarr
+    container_name: radarr
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=America/Sao_Paulo
+    volumes:
+      - $CONFIG/radarr:/config
+      - $DISK/downloads:/downloads
+      - $DISK/media/movies:/movies
+    ports:
+      - 7878:7878
+    networks:
+      - homeserver
+    restart: unless-stopped
+  bazarr:
+    image: lscr.io/linuxserver/bazarr:latest
+    container_name: bazarr
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Etc/UTC
+    volumes:
+      - /path/to/bazarr/config:/config
+      - $DISK/media/movies:/movies
+      - $DISK/media/tv:/tv 
+    ports:
+      - 6767:6767
+    restart: unless-stopped
+  overseerr:
+    image: lscr.io/linuxserver/overseerr:latest
+    container_name: overseerr
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Etc/UTC
+    volumes:
+      - /path/to/appdata/config:/config
+    ports:
+      - 5055:5055
+    restart: unless-stopped
