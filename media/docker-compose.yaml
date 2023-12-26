@@ -15,7 +15,7 @@ services:
     image: lscr.io/linuxserver/qbittorrent
     container_name: qBittorrent
     volumes:
-      - $DISK/.apps/qbittorrent:/config
+      - $CONFIG/qbittorrent:/config
       - $DISK/downloads:/downloads
     ports:
       - 8080:8080
@@ -28,7 +28,7 @@ services:
     image: lscr.io/linuxserver/jackett
     container_name: jackett
     volumes:
-      - $DISK/.apps/jackett/configuration:/config
+      - $CONFIG/jackett/configuration:/config
       - $DISK/downloads:/downloads
     networks:
       - homeserver
@@ -36,6 +36,7 @@ services:
       - 9117:9117
     restart: unless-stopped
   plex:
+    restart: unless-stopped
     image: lscr.io/linuxserver/plex:latest
     container_name: plex
     network_mode: host
@@ -45,7 +46,7 @@ services:
       - TZ=America/Sao_Paulo
       - VERSION=docker
     volumes:
-      - $LOCAL/.apps/plex:/config
+      - $CONFIG/plex:/config
       - $DISK/media/movies:/movies
       - $DISK/media/tv:/tv 
   sonarr:
@@ -56,7 +57,7 @@ services:
       - PGID=1000
       - TZ=America/Sao_Paulo
     volumes:
-      - $LOCAL/sonarr:/config
+      - $CONFIG/sonarr:/config
       - $DISK/downloads:/downloads
       - $DISK/media/tv:/tv 
     ports:
@@ -72,9 +73,9 @@ services:
       - PGID=1000
       - TZ=America/Sao_Paulo
     volumes:
-      - $LOCAL/radarr:/config
+      - $CONFIG/radarr:/config
       - $DISK/downloads:/downloads
-      - $DISK/media/movies:/movies #remember to chmod -R -v 777 /movies
+      - $DISK/media/movies:/movies
     ports:
       - 7878:7878
     networks:
