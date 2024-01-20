@@ -76,10 +76,10 @@ services:
       - $CONFIG/jellyfin_naughty:/config
       - $DISK/media/naughty:/data/movies
     ports:
-      - 8095:8096
+      - 8097:8096
       - 8921:8920 #optional
-      - 7359:7359/udp #optional
-      - 1900:1900/udp #optional
+      - 7360:7359/udp #optional
+      - 1901:1900/udp #optional
     restart: unless-stopped
   sonarr:
     image: lscr.io/linuxserver/sonarr
