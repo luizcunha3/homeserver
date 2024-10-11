@@ -6,10 +6,10 @@ services:
       - "53:53/tcp"
       - "53:53/udp"
       - "67:67/udp"
-      - "80:80/tcp"
+      - "8888:80/tcp"
     environment:
-      TZ: 'America/Chicago'
-      # WEBPASSWORD: 'set a secure password here or it will be random'
+      TZ: 'America/Sao_Paulo'
+      WEBPASSWORD: 'familia1'
     volumes:
       - './etc-pihole:/etc/pihole'
       - './etc-dnsmasq.d:/etc/dnsmasq.d'
@@ -17,6 +17,7 @@ services:
       - NET_ADMIN
     restart: unless-stopped
   stirling-pdf:
+    container_name: pdf-tools
     image: frooodle/s-pdf:latest
     ports:
       - '8080:8080'
