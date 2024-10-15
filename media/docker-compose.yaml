@@ -3,14 +3,7 @@ networks:
   homeserver:
     driver: bridge
 services:
-  homarr:
-    container_name: homarr
-    image: ghcr.io/ajnart/homarr:latest
-    restart: unless-stopped
-    volumes:
-      - $CONFIG/homarr:/app/data/configs
-    ports:
-      - '80:7575'
+
   qbittorrent:
     image: lscr.io/linuxserver/qbittorrent
     container_name: qBittorrent
@@ -27,6 +20,8 @@ services:
   prowlarr:
     image: lscr.io/linuxserver/prowlarr:latest
     container_name: prowlarr
+    networks:
+      - homeserver
     volumes:
       - $CONFIG/prowlarr:/config
     ports:
@@ -139,4 +134,16 @@ services:
       - /$CONFIG/overseer:/config
     ports:
       - 5055:5055
+    restart: unless-stopped
+  tautulli:
+    image: lscr.io/linuxserver/tautulli:latest
+    container_name: tautulli
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Etc/UTC
+    volumes:
+      - /$CONFIG/overseer:/config
+    ports:
+      - 8181:8181
     restart: unless-stopped

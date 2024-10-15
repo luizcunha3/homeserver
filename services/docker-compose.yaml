@@ -1,25 +1,16 @@
-version: "3.8"
+version: '3.3'
 services:
-  uptime_kuma:
-    container_name: kuma
-    image: louislam/uptime-kuma
-    restart: unless-stopped
+  stirling-pdf:
+    container_name: pdf_tools
+    image: frooodle/s-pdf:latest
+    ports:
+      - '9999:8080'
     volumes:
-      - $CONFIG/kuma:/app/data
-    ports:
-      - 3001:3001
-  pihole:
-    container_name: pihole
-    image: pihole/pihole:latest
-    ports:
-      - "53:53/tcp"
-      - "53:53/udp"
-      - "67:67/udp"
-      - "80:80/tcp"
+      - /location/of/trainingData:/usr/share/tessdata #Required for extra OCR languages
+      - /location/of/extraConfigs:/configs
+#      - /location/of/customFiles:/customFiles/
+#      - /location/of/logs:/logs/
     environment:
-      TZ: 'America/Chicago'
-      WEBPASSWORD: 'familia1'
-    volumes:
-      - './etc-pihole:/etc/pihole'
-      - './etc-dnsmasq.d:/etc/dnsmasq.d'
-    restart: unless-stopped
+      - DOCKER_ENABLE_SECURITY=false
+      - INSTALL_BOOK_AND_ADVANCED_HTML_OPS=false
+      - LANGS=pt_BR
